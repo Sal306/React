@@ -1,13 +1,9 @@
-import React, { Component } from 'react';
-import { Card, CardImg, CardImgOverlay, CardText, CardBody, CardTitle } from 'reactstrap';
+import React from 'react';
+import { Card, CardImg, CardText, CardBody, CardTitle } from 'reactstrap';
 
-class DishDetail extends Component {
 
-    constructor(props) {
-        super(props)
-    }
 
-    renderDish(dish) {
+    function RenderDish({dish}) {
         if(dish){
         return (
             <Card>
@@ -19,18 +15,24 @@ class DishDetail extends Component {
             </Card>
         );
         }
+        else{
+            return(
+                <div> No dish selected</div>
+            );
+        }
     }
 
-    renderComments(comments) {
+    function RenderComments({comments}) {
         if(comments){
         var commentList = comments.map(comment => {
             return (
+                <div className='container'> 
                 <li key={comment.id} >
                     {comment.comment}
                     <br /><br />
-                    -- {comment.author}, {comment.date}
+                    -- {comment.author}, {new Intl.DateTimeFormat('en-us' ,{year: 'numeric', month: 'short', day: '2-digit'}).format(new Date(Date.parse(comment.date)))}
                     <br /><br />
-                </li>
+                </li></div>
             );
         });
         
@@ -50,17 +52,17 @@ class DishDetail extends Component {
         }
     }
 
-    render() {
-        const sd = this.props.selectedDish;
-
+    const DishDetail = (props) => {
+        const sd = props.SelectedDish;
+        console.log(sd)
         if (sd != null) {
             return (
                 <div className="row">
                     <div className="col-12 col-md-5 m-1">
-                        {this.renderDish(sd)}
+                        <RenderDish dish={sd}> </RenderDish>
                     </div>
                     <div className="col-12 col-md-5 m-1">
-                        {this.renderComments(sd.comments)}
+                        <RenderComments comments= {(sd.comments)}></RenderComments>
                     </div>
                 </div>
             );
@@ -71,6 +73,6 @@ class DishDetail extends Component {
             );
         }
     }
-}
+
 
 export default DishDetail;
